@@ -1,20 +1,24 @@
 import 'package:flutter/foundation.dart';
 import '../models/task.dart';
+import '../services/api_service.dart';
 import '../services/task_storage.dart';
 
 enum TaskFilter { all, active, done }
 
 class TaskProvider extends ChangeNotifier {
-  TaskProvider(this._storage);
+  TaskProvider(this._storage, this._api);
 
   final TaskStorage _storage;
+  final ApiService _api;
 
   List<Task> _tasks = [];
   TaskFilter _filter = TaskFilter.all;
   bool _isLoading = false;
+  String? _error;
 
   TaskFilter get filter => _filter;
   bool get isLoading => _isLoading;
+  String? get error => _error;
   int get remainingCount => _tasks.where((t) => !t.isDone).length;
 
   List<Task> get tasks => switch (_filter) {
@@ -63,6 +67,23 @@ class TaskProvider extends ChangeNotifier {
   void setFilter(TaskFilter filter) {
     _filter = filter;
     notifyListeners();
+  }
+
+  Future<void> importSampleTasks() async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+    try {
+      final remote = await _api.fetchSampleTasks();
+      final existingIds = _tasks.map((t) => t.id).toSet();
+      _tasks.addAll(remote.where((t) => !existingIds.contains(t.id)));
+      await _storage.saveTasks(_tasks);
+    } catch (e) {
+      _error = 'Could not load sample tasks. Check your internet connection.';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   void _saveAndNotify() {

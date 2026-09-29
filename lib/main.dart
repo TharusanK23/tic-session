@@ -3,12 +3,13 @@ import 'package:provider/provider.dart';
 
 import 'providers/task_provider.dart';
 import 'screens/home_screen.dart';
+import 'services/api_service.dart';
 import 'services/task_storage.dart';
 
 void main() {
   runApp(
     ChangeNotifierProvider(
-      create: (_) => TaskProvider(TaskStorage())..loadTasks(),
+      create: (_) => TaskProvider(TaskStorage(), ApiService())..loadTasks(),
       child: const TaskFlowApp(),
     ),
   );
@@ -23,6 +24,12 @@ class TaskFlowApp extends StatelessWidget {
       title: 'TaskFlow',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(colorSchemeSeed: Colors.indigo, useMaterial3: true),
+      darkTheme: ThemeData(
+        colorSchemeSeed: Colors.indigo,
+        brightness: Brightness.dark,
+        useMaterial3: true,
+      ),
+      themeMode: ThemeMode.system,
       home: const HomeScreen(),
     );
   }
