@@ -22,4 +22,20 @@ class Task {
       createdAt: createdAt,
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'title': title,
+        'description': description,
+        'isDone': isDone,
+        'createdAt': createdAt.toIso8601String(),
+      };
+
+  factory Task.fromJson(Map<String, dynamic> json) => Task(
+        id: json['id'] as String,
+        title: json['title'] as String,
+        description: json['description'] as String? ?? '',
+        isDone: json['isDone'] as bool? ?? false,
+        createdAt: DateTime.parse(json['createdAt'] as String),
+      );
 }

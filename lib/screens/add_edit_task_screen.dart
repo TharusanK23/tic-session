@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import '../models/task.dart';
+import '../providers/task_provider.dart';
 
 class AddEditTaskScreen extends StatefulWidget {
   const AddEditTaskScreen({super.key, this.task});
 
-  final Task? task; // null = add mode, not null = edit mode
+  final Task? task;
 
   @override
   State<AddEditTaskScreen> createState() => _AddEditTaskScreenState();
@@ -33,18 +36,16 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
 
   void _save() {
     if (!_formKey.currentState!.validate()) return;
+    final provider = context.read<TaskProvider>();
     final title = _titleController.text.trim();
     final description = _descriptionController.text.trim();
 
-    final result = _isEditing
-        ? widget.task!.copyWith(title: title, description: description)
-        : Task(
-            id: DateTime.now().microsecondsSinceEpoch.toString(),
-            title: title,
-            description: description,
-            createdAt: DateTime.now(),
-          );
-    Navigator.of(context).pop(result); // send the task back
+    if (_isEditing) {
+      provider.updateTask(widget.task!.copyWith(title: title, description: description));
+    } else {
+      provider.addTask(title, description);
+    }
+    Navigator.of(context).pop();
   }
 
   @override
