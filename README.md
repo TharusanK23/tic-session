@@ -29,8 +29,9 @@ dart run practice/day1_dart_basics.dart   # Day 1 Dart practice file
 
 | Branch | What's in it |
 |---|---|
-| `day-02-start` | Fresh `flutter create` project |
-| `day-02-end` / `day-03-start` | Day 1 Dart practice file, `Task` model, static task list UI |
+| `day-01-start` | Fresh `flutter create` project (the default counter app used for the hot reload demo) |
+| `day-01-end` / `day-02-start` | + `practice/day1_dart_basics.dart` (Day 1 Dart exercises) |
+| `day-02-end` / `day-03-start` | `Task` model, static task list UI |
 | `day-03-end` / `day-04-start` | Stateful home, Add/Edit form with validation, navigation, swipe to delete |
 | `day-04-end` / `day-05-start` | Provider, JSON, `shared_preferences` persistence, filters |
 | `day-05-end` / `day-06-start` | REST API import, error handling, dark mode, empty state, app icon |
